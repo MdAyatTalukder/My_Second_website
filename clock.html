@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>টাইম সেট অপশন সহ ঘড়ি</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #00ff88;
+      font-family: sans-serif;
+    }
+    .clock {
+      width: 320px;
+      height: 320px;
+      border: 12px solid #00ff88;
+      border-radius: 50%;
+      position: relative;
+      background: #000;
+      box-shadow: 0 0 40px #00ff88;
+      margin-bottom: 20px;
+    }
+    .clock::after {
+      content: '';
+      width: 18px;
+      height: 18px;
+      background: #00ff88;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: 10;
+      box-shadow: 0 0 20px #00ff88;
+    }
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(90deg);
+      border-radius: 5px;
+      box-shadow: 0 0 10px #00ff88;
+    }
+    .hour { width: 7px; height: 75px; background: #00ff88; z-index: 3; }
+    .minute { width: 4px; height: 100px; background: #00ff88; z-index: 2; }
+    .second { width: 2px; height: 120px; background: #00ff88; z-index: 1; }
+    .number {
+      position: absolute;
+      color: #00ff88;
+      font-size: 20px;
+      font-weight: bold;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-shadow: 0 0 5px #00ff88;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .controls input {
+      width: 50px;
+      padding: 5px;
+      background: #111;
+      border: 1px solid #00ff88;
+      color: #00ff88;
+      text-align: center;
+    }
+    .controls button {
+      padding: 6px 12px;
+      background: #00ff88;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .controls button:hover {
+      background: #00cc66;
+    }
+  </style>
+</head>
+<body>
+
+<div class="clock">
+  <div class="hand hour" id="hour"></div>
+  <div class="hand minute" id="minute"></div>
+  <div class="hand second" id="second"></div>
+
+  <!-- সংখ্যা -->
+  <div class="number" style="transform: translate(-50%, -50%) rotate(30deg) translate(0, -135px) rotate(-30deg);">1</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(60deg) translate(0, -135px) rotate(-60deg);">2</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(90deg) translate(0, -135px) rotate(-90deg);">3</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(120deg) translate(0, -135px) rotate(-120deg);">4</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(150deg) translate(0, -135px) rotate(-150deg);">5</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(180deg) translate(0, -135px) rotate(-180deg);">6</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(210deg) translate(0, -135px) rotate(-210deg);">7</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(240deg) translate(0, -135px) rotate(-240deg);">8</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(270deg) translate(0, -135px) rotate(-270deg);">9</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(300deg) translate(0, -135px) rotate(-300deg);">10</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(330deg) translate(0, -135px) rotate(-330deg);">11</div>
+  <div class="number" style="transform: translate(-50%, -50%) rotate(0deg) translate(0, -135px) rotate(0deg);">12</div>
+</div>
+
+<div class="controls">
+  <input type="number" id="setHour" placeholder="ঘণ্টা" min="0" max="23">
+  <input type="number" id="setMinute" placeholder="মিনিট" min="0" max="59">
+  <input type="number" id="setSecond" placeholder="সেকেন্ড" min="0" max="59">
+  <button onclick="setCustomTime()">Set Time</button>
+</div>
+
+<script>
+  let customTime = new Date();
+
+  function updateClock() {
+    customTime.setSeconds(customTime.getSeconds() + 1);
+
+    const seconds = customTime.getSeconds();
+    const minutes = customTime.getMinutes();
+    const hours = customTime.getHours();
+
+    const secondDeg = seconds * 6;
+    const minuteDeg = minutes * 6 + seconds * 0.1;
+    const hourDeg = (hours % 12) * 30 + minutes * 0.5;
+
+    document.getElementById("second").style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+    document.getElementById("minute").style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+    document.getElementById("hour").style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+  }
+
+  function setCustomTime() {
+    const h = parseInt(document.getElementById("setHour").value) || 0;
+    const m = parseInt(document.getElementById("setMinute").value) || 0;
+    const s = parseInt(document.getElementById("setSecond").value) || 0;
+
+    customTime.setHours(h);
+    customTime.setMinutes(m);
+    customTime.setSeconds(s);
+    updateClock();
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock();
+</script>
+
+</body>
+</html>
